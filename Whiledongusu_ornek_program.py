@@ -19,9 +19,9 @@ while(True):
        print("kullanici adi ve sifre yanlis girdiniz.")
        print("Tekrar giris yapiniz.")
         
-        """
-        kullanici = "Musa123"
-sifre = "123456"
+ """
+ kullanici = "Musa123
+ sifre = "123456"
 
 while(True):
 
@@ -44,4 +44,4 @@ while(True):
     elif(girkullanici != kullanici and girsifre != sifre):
        print("kullanici adi ve sifre yanlis girdiniz.")
        print("Tekrar giris yapiniz.")
-       """
+  """
