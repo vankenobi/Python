@@ -1,0 +1,34 @@
+"""
+Deneme #1
+
+def merhaba():
+    print("Merhaba Dunya")
+merhaba()
+
+"""
+"""
+#Faktöriyel hesaplama ornek
+
+def faktoriel(s):
+    sonuc = 1
+    for i in range(1,s+1):
+        sonuc *= i
+    return sonuc    
+sayi = int(input("Lutfen bir sayi giriniz:"))
+ 
+a = faktoriel(sayi)
+print(a)
+"""
+
+"""
+#usalma Fonksiyonu örnek 
+
+def usal(x,y):
+    sonuc = int(x**y)
+    return sonuc 
+taban = int(input("Lutfen taban giriniz:"))
+us = int(input("Lutfen us giriniz:"))
+sonuc = int(usal(taban,us))
+print(sonuc)
+
+"""
