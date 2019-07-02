@@ -1,0 +1,3 @@
+x = input("Parola gir:")
+if "*" not in x:
+    print("Parola içinde yıldız karakterini kullanmalısınız.")
