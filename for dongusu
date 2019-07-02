@@ -1,0 +1,8 @@
+""" for i in range(0,100,2):  Son parametre sayiyi ikişer ikişer artırır.
+    print("Sayi:",i)
+"""
+"""
+alfabe = "asdfgghjhmbvşnşiğtyl"
+ for i in alfabe:
+     print(i)
+"""
