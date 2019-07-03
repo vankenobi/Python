@@ -2,6 +2,7 @@ import os
 kitaplistesi = list()
 kitap = ()
 
+
 def kitapekle(kitap:tuple,liste:list):
 
     liste.append(kitap)
@@ -14,6 +15,8 @@ def kontrol(kitap:tuple,liste:list):
     else:
         return False
 def kitap_listele(liste:list):
+
+
     for i in liste:
         print("Kitap adi: {} Kitabin yazari: {}".format(i[0],i[1]))
 def kitap_cikar(kitap:tuple,liste:list):
@@ -21,11 +24,18 @@ def kitap_cikar(kitap:tuple,liste:list):
         liste.remove(kitap)
     else:
         print("Boyle bir kitap bulunamadı")
-    
+def kitap_al(kitap:tuple,liste:list):
+    if kontrol(kitap,liste) == True:
+        print("Lutfen kitabı geri getirmeyi unutmayın. Keyifli Okumalar")
+        kitaplistesi.remove(kitap)
+    else:
+        print("Aradiginiz kitap bulunamadı")  
+
 menu = """
        [1]Kitap Ekle
        [2]Kitap Listele
        [3]Kitap çıkar
+       [4]Kitap Al
        [Q]Çıkış       
        """
 
@@ -49,15 +59,15 @@ while True:
         kitap_yazar = input("Kitabın yazarini giriniz:")
         kitap = (kitap_adi,kitap_yazar)
         kitap_cikar(kitap,kitaplistesi)
-
+    elif secim == "4":
+        kitap_adi = input("Kitap Adi giriniz:")
+        kitap_yazar = input("Kitabın yazarini giriniz:")
+        kitap = (kitap_adi,kitap_yazar)
+        kitap_al(kitap,kitaplistesi)
+        input()
     elif secim == "q" or secim == "Q":
         print("Keyifli Okumalar.")
         quit()
     else:
         print("Hatalı tuşlama yaptiniz.")
     
-    
-
-    
-        
- 
