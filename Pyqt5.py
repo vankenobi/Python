@@ -34,7 +34,7 @@ def pencere ():
     v_box.addWidget(buton1)
     v_box.addWidget(buton2)
 
-    v_box.addLayout(h_box)
+    v_box.addLayout(h_box) #v_box ' ı H_box a bağladık.
 
     window.setLayout(v_box)
     window.setLayout(h_box)
