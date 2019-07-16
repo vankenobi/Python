@@ -1,0 +1,81 @@
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+
+import sys
+
+class Pencere(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.pencere2 = Pencere2()
+        self.setCentralWidget(self.pencere2)
+        self.setUI()
+
+    def setUI(self):
+        
+
+        menu = self.menuBar()
+        dosya = menu.addMenu("Dosya")
+        duzen = menu.addMenu("Düzen")
+        yardım = menu.addMenu("Yardım")
+
+        yeni_dosya = dosya.addAction("Yeni Dosya")
+        dosya_aç = dosya.addAction("Dosya Aç")
+        kaydet = dosya.addAction("Kaydet")
+        yazdir = QAction("yazdir",self)
+        temizle = duzen.addAction("Temizle")
+
+        #QAction objesi gönderdim
+        ayarlar = dosya.addMenu("Ayarlar")
+        ayarlar.addAction("Ses Ayarları")
+        ayarlar.addAction("Görüntü Ayarları")
+        ayarlar.addAction("Sistem Ayarları")
+        
+        yazdir.setShortcut("Ctrl+P")
+        kaydet.setIcon(QIcon("/home/musa/Desktop/save.png"))
+        yazdir.setIcon(QIcon("/home/musa/Desktop/printer.png"))
+        yeni_dosya.setIcon(QIcon("/home/musa/Desktop/add.png"))
+        temizle.setIcon(QIcon("/home/musa/Desktop/rubbish.png"))
+
+        self.setWindowTitle("Menu_bar")
+        self.setGeometry(150,150,300,300)
+        self.show()
+class Pencere2(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setUI()
+    def setUI(self):
+        form = QFormLayout()
+        v_box = QVBoxLayout()
+        
+
+        toplama_button = QPushButton()
+        çıkarma_button = QPushButton()
+        çarpma_button = QPushButton()
+        bölme_button = QPushButton()
+        
+        toplama_button.setIcon(QIcon("/home/musa/Desktop/Artı.png"))
+        çarpma_button.setIcon(QIcon("/home/musa/Desktop/Çarpı.png"))
+        çıkarma_button.setIcon(QIcon("/home/musa/Desktop/Eksi.png"))
+        bölme_button.setIcon(QIcon("/home/musa/Desktop/Bölü.png"))
+
+        v_box.addWidget(toplama_button)
+        v_box.addWidget(çıkarma_button)
+        v_box.addWidget(bölme_button)
+        v_box.addWidget(çarpma_button)
+
+        izgara = QGridLayout()
+        sayac = 0
+        for i in range(1,4):
+            for x in range(1,4):
+                sayac+=1
+                izgara.addWidget(QPushButton("{}".format(sayac)),i,x)
+        form.addRow(izgara)
+        form.addRow(v_box)
+        self.setLayout(form)
+        
+        
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    pencere = Pencere()
+    sys.exit(app.exec())
