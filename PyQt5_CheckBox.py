@@ -9,10 +9,11 @@ class Pencere(QWidget): #QtWidget alt class
         super().__init__()
         self.setUI() #Özellik eklemek için var.
     def setUI(self):
+        form = QFormLayout()
+        
         self.cb = QCheckBox("Kabul Ediyorum")
         self.cb2 = QCheckBox("Kabul Etmiyorum")
-        form = QFormLayout()
-
+        
         self.button = QPushButton("Gonder")
 
         v_box = QVBoxLayout()
@@ -25,6 +26,7 @@ class Pencere(QWidget): #QtWidget alt class
         self.button.clicked.connect(self.yap)
     
         self.show()
+        
     def yap(self):
         if self.cb.isChecked():
             print("Anlaşma Kabul Edilmiştir.")
