@@ -207,7 +207,7 @@ def Main():
     şehirler = list()
     for i in x.split():
         şehirler.append(Şehir(i))
-    musa = Yolcu("Musa","Küçük",2149645168)
+    musa = Yolcu("Musa","Küçük",12345678910)
     pegasus = Pegasus()
     uçuş1 = pegasus.uçuşOluştur(şehirler[5],şehirler[12],datetime(2018,4,9,7,40))
     bilet1 = pegasus.BiletAl(musa,uçuş1,"A15")
