@@ -5,7 +5,7 @@ import sys
 
 def pencere():
    def giriş():
-       if g1.text() == "musa" and g2.text() == "küçük":
+       if g1.text() == "admin" and g2.text() == "admin":
            durumlabel.setText("Giriş Başarılı")
        else:
            durumlabel.setText("Giriş Başarısız")
