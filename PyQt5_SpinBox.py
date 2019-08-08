@@ -14,6 +14,7 @@ class Pencere(QWidget):
         
         #self.sp.setMinimum(200) #Minimum Değer ayarlanır.
         #self.sp.setMaximum(500) #Maximum Deger ayarlanır.
+        
         self.sp.setRange(20,2000) # min ve max aralığı belirler.
         self.sp.setValue(300) #Program başladığında çıkacak olan değer.
         
@@ -21,7 +22,6 @@ class Pencere(QWidget):
 
         v_box.addWidget(self.sp)
         self.setLayout(v_box)
-
         
         self.show()
 if __name__ == "__main__":
