@@ -13,40 +13,40 @@ class Pencere(QMainWindow):
     def setUI(self):
 
         menu = self.menuBar()
-        dosya = menu.addMenu("Dosya")
+        dosya = menu.addMenu("Dosya")  #menubar üzerine butonları ekledik
         duzen = menu.addMenu("Düzen")
         yardım = menu.addMenu("Yardım")
 
-        yeni_dosya = dosya.addAction("Yeni Dosya")
-        dosya_aç = dosya.addAction("Dosya Aç")
+        
+        yeni_dosya = dosya.addAction("Yeni Dosya") #Dosya butonununa alt seçenek ekliyoruz.
+        dosya_aç = dosya.addAction("Dosya Aç") 
         kaydet = dosya.addAction("Kaydet")
-        yazdir = QAction("yazdir",self)
-        temizle = duzen.addAction("Temizle")
+        
+        #Hazırla adında bir Qaction objesi oluşturduk.
 
-        #QAction objesi gönderdim
-        ayarlar = dosya.addMenu("Ayarlar")
+        hazırla = QAction("hazırla",self) 
+        hazırla.setShortcut("Ctrl+l) # Bir kısayol ekledik
+        dosya.addAction(hazırla) #Dosya butonunun altına gönderdik.
+    
+
+        temizle = duzen.addAction("Temizle")
+        sil = duzen.addAction("Sil")
+
+        ayarlar = dosya.addMenu("Ayarlar") 
+        
         ayarlar.addAction("Ses Ayarları")
         ayarlar.addAction("Görüntü Ayarları")
         ayarlar.addAction("Sistem Ayarları")
         
-        
-
-        yazdir.setShortcut("Ctrl+P")
-        kaydet.setIcon(QIcon("/home/musa/Desktop/save.png"))
-        yazdir.setIcon(QIcon("/home/musa/Desktop/printer.png"))
+        kaydet.setIcon(QIcon("/home/musa/Desktop/save.png")) # Icon ekledik.
         yeni_dosya.setIcon(QIcon("/home/musa/Desktop/add.png"))
         temizle.setIcon(QIcon("/home/musa/Desktop/rubbish.png"))
+
+        
 
         self.setWindowTitle("Menu_bar")
         self.setGeometry(150,150,300,300)
         self.show()
-
-
-        
-
-
-
-
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
