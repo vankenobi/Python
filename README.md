@@ -1,2 +1,2 @@
 # Python
-Python example 
+Python examples
