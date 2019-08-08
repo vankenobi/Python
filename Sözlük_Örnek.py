@@ -1,5 +1,5 @@
-karakter1 = {"Ad":"Musa","Soyad":"Kucuk","Güc":1023,"can":2050}
-karakter2 = {"Ad":"Selim","Soyad":"aktas","Güc":1000,"can":2070}
+karakter1 = {"Ad":"Ali","Soyad":"Poyraz","Güc":1023,"can":2050}
+karakter2 = {"Ad":"Selim","Soyad":"Enver","Güc":1000,"can":2070}
 
 
 def vur(vuran:dict,vurulan:dict):
