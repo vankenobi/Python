@@ -9,6 +9,7 @@ class Ana(QMainWindow):
         super().__init__()
         self.setUI()
     def setUI(self):
+        
         self.ara = QLineEdit()
         self.ara.setPlaceholderText("Ara")
         self.button = QPushButton("Gönder")
