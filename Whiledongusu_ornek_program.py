@@ -1,4 +1,4 @@
-kullanici = "Musa123"
+kullanici = "test123"
 sifre = "123456"
 
 while(True):
