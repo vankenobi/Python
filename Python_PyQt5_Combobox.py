@@ -9,10 +9,11 @@ class Pencere(QWidget):
         super().__init__()
         self.setUI()
     def setUI(self):
+        
         self.combo = QComboBox()
         self.label = QLabel("Bilgi")
         self.combo.addItems(self.ekle())
-
+        
         v_box = QVBoxLayout()
         v_box.addWidget(self.combo)
         v_box.addWidget(self.label)
@@ -21,6 +22,7 @@ class Pencere(QWidget):
 
         self.setLayout(v_box)
         self.show()
+        
     def ekle(self):
         liste = [str(x) for x in range(1940,2020)]
         return liste
