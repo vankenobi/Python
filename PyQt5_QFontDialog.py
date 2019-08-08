@@ -11,14 +11,20 @@ class Pencere(QWidget):
     def setUI(self):
         self.label = QLabel("Deneme Yazısı")
         self.button = QPushButton("Değiştir")
+        
         v_box = QVBoxLayout()   
         form = QFormLayout()
+        
         v_box.addWidget(self.label)
         v_box.addWidget(self.button)
+        
         form.addRow(v_box)
+        
         self.setLayout(form)
+        
         self.button.clicked.connect(self.uygula)
         self.show()
+        
     def uygula(self):
         alinanQfontObjesi,durum = QFontDialog.getFont() 
         if durum:
