@@ -7,7 +7,6 @@ kamera.set(4,300)
 alcak = np.array([88,50,50])
 yuksek = np.array([130,255,255])
 
-
 while True:
     ret,goruntu = kamera.read()
     hsv = cv2.cvtColor(goruntu,cv2.COLOR_BGR2HSV)
