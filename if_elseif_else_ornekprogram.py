@@ -7,7 +7,7 @@ kullanicisifre = input("Lutfen sifreyi giriniz")
 if( defkullanici == kullaniciadi and defsifre == kullanicisifre ):
     print("Giris izni verildi.")
 elif(defkullanici != kullaniciadi and defsifre == kullanicisifre):
-    print("Kullanici adi yanlis girdiniz.")
+    print("Kullanici adini yanlis girdiniz.")
 elif(defkullanici == kullaniciadi and defsifre != kullanicisifre):
     print("Sifreyi yanlis girdiniz.")
 else:
