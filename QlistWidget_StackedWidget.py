@@ -40,8 +40,8 @@ class Pencere(QWidget):
          
     def w1lay(self):
         form = QFormLayout()
-        form.addRow("Adınız:",QLineEdit())
-        form.addRow("Yaşınız:",QSpinBox()) 
+        form.addRow("Firma Adı:",QLineEdit())
+        form.addRow("Firma Yaşı:",QSpinBox()) 
         form.addRow("Kabul Ediyor musunuz:",QCheckBox())
         self.w1.setLayout(form)
     def w2lay(self):
@@ -52,8 +52,8 @@ class Pencere(QWidget):
         self.w2.setLayout(form)
     def w3lay(self):
         form = QFormLayout()
-        form.addRow("Adınız:",QLineEdit())
-        form.addRow("bardak sayısı:",QSpinBox()) 
+        form.addRow("Telefon Numarası:",QLineEdit())
+        form.addRow("kişi sayısı:",QSpinBox()) 
         form.addRow("Kabul Ediyor musunuz:",QCheckBox())
         self.w3.setLayout(form)
 def ana():
