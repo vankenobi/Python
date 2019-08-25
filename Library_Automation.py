@@ -86,47 +86,52 @@ class MainApp(QMainWindow , ui):
     ######### Day Operations #################
     
     def Add_Lend_Operation(self):
-        ogrenci_tc = self.lineEdit_2.text()
-        ogrenci_kitap = self.comboBox_3.currentText()
-        gun = self.comboBox_2.currentText()
-        bugun = datetime.now()
-        bugun_text = datetime.strftime(bugun,'%x')
-        fark = timedelta(days=int(gun))
-        teslim_tarihi = bugun + fark
-        teslim_tarihi_text = datetime.strftime(teslim_tarihi,'%x')
-        durum = "Bekleniyor"
-        self.connection = psycopg2.connect(user = "postgres",
-                                           password = "1234",
-                                           host = "localhost",
-                                           port = "5432",
-                                           database = "postgres")
-        self.cursor = self.connection.cursor()
-        self.cursor.execute("""SELECT isbn FROM kitaplar WHERE kitap_adi = %s""",[(ogrenci_kitap)])
-        isbn = self.cursor.fetchone()
-        self.connection.close()
-        self.connection = psycopg2.connect(user = "postgres",
-                                           password = "1234",
-                                           host = "localhost",
-                                           port = "5432",
-                                           database = "postgres")
-        self.cursor = self.connection.cursor()
-        sql = """INSERT INTO islemler(ogrenci_tc,kitap_isbn,kitap_durum,alindi_tarihi,teslim_tarihi) VALUES(%s,%s,%s,%s,%s)"""
-        self.cursor.execute(sql,(ogrenci_tc,isbn[0],durum,bugun_text,teslim_tarihi_text))
-        self.connection.commit()
-        self.connection.close()
-        self.connection = psycopg2.connect(user = "postgres",
-                                           password = "1234",
-                                           host = "localhost",
-                                           port = "5432",
-                                           database = "postgres")
-        self.cursor = self.connection.cursor()
-        sql  = """UPDATE kitaplar SET kitap_adet = kitap_adet - 1 WHERE isbn = isbn"""
-        self.cursor.execute(sql,isbn[0])
-        self.connection.commit()
-        self.connection.close()
-        self.Show_All_Lend_Operations()
-        self.lineEdit_2.currentText()
-        
+        try:
+            ogrenci_tc = self.lineEdit_2.text()
+            ogrenci_kitap = self.comboBox_3.currentText()
+            gun = self.comboBox_2.currentText()
+            bugun = datetime.now()
+            bugun_text = datetime.strftime(bugun,'%x')
+            fark = timedelta(days=int(gun))
+            teslim_tarihi = bugun + fark
+            teslim_tarihi_text = datetime.strftime(teslim_tarihi,'%x')
+            durum = "Bekleniyor"
+            self.connection = psycopg2.connect(user = "postgres",
+                                            password = "1234",
+                                            host = "localhost",
+                                            port = "5432",
+                                            database = "postgres")
+            self.cursor = self.connection.cursor()
+            self.cursor.execute("""SELECT isbn FROM kitaplar WHERE kitap_adi = %s""",[(ogrenci_kitap)])
+            isbn = self.cursor.fetchone()
+            self.connection.close()
+            self.connection = psycopg2.connect(user = "postgres",
+                                            password = "1234",
+                                            host = "localhost",
+                                            port = "5432",
+                                            database = "postgres")
+            self.cursor = self.connection.cursor()
+            sql = """INSERT INTO islemler(ogrenci_tc,kitap_isbn,kitap_durum,alindi_tarihi,teslim_tarihi) VALUES(%s,%s,%s,%s,%s)"""
+            self.cursor.execute(sql,(ogrenci_tc,isbn[0],durum,bugun_text,teslim_tarihi_text))
+            self.connection.commit()
+            self.connection.close()
+            self.connection = psycopg2.connect(user = "postgres",
+                                            password = "1234",
+                                            host = "localhost",
+                                            port = "5432",
+                                            database = "postgres")
+            self.cursor = self.connection.cursor()
+            sql  = """UPDATE kitaplar SET kitap_adet = kitap_adet - 1 WHERE isbn = isbn"""
+            self.cursor.execute(sql,isbn[0])
+            self.connection.commit()
+            self.connection.close()
+            self.Show_All_Lend_Operations()
+            self.lineEdit_2.setText("")
+            QMessageBox.about(self,"Bilgilendirme","{} adlı kitap {} günlüğüne öğrenciye teslim edilmiştir.".format(ogrenci_kitap,gun))
+
+        except psycopg2.errors.ForeignKeyViolation:
+            QMessageBox.warning(self,"Dikkat","Girdiğiniz kimlik no sistemde bulunmamaktadır.")
+            
     def Show_All_Lend_Operations(self):
         self.connection = psycopg2.connect(user = "postgres",
                                            password = "1234",
@@ -216,7 +221,7 @@ class MainApp(QMainWindow , ui):
                 self.connection.commit()
                 self.connection.close()
 
-                self.statusBar().showMessage("Yeni kitap eklendi")
+                QMessageBox.about(self,"Bilgilendirme","Yeni kitap başarıyla eklendi.")
 
                 self.Show_All_Books()
                 self.Show_Book_Combobox()
