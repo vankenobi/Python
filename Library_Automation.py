@@ -136,30 +136,37 @@ class MainApp(QMainWindow , ui):
             self.cursor = self.connection.cursor()
             self.cursor.execute("""SELECT * FROM kitaplar WHERE kitap_adi = %s""",[(ogrenci_kitap)])
             isbn = self.cursor.fetchone()
+            print(isbn)
             self.connection.close()
-
-            self.connection = psycopg2.connect(user = "postgres",
-                                            password = "1234",
-                                            host = "localhost",
-                                            port = "5432",
-                                            database = "postgres")
-            self.cursor = self.connection.cursor()
-            sql = """INSERT INTO islemler(ogrenci_tc,kitap_isbn,kitap_durum,alindi_tarihi,teslim_tarihi) VALUES(%s,%s,%s,%s,%s)"""
-            self.cursor.execute(sql,(ogrenci_tc,isbn[0],durum,bugun_text,teslim_tarihi_text))
-            self.connection.commit()
-            self.connection.close()
-            self.connection = psycopg2.connect(user = "postgres",
-                                            password = "1234",
-                                            host = "localhost",
-                                            port = "5432",
-                                            database = "postgres")
-            self.cursor = self.connection.cursor()
-            sql  = """UPDATE kitaplar SET kitap_adet = kitap_adet - 1 WHERE isbn = %s"""
-            self.cursor.execute(sql,[(isbn[0])])
-            self.connection.commit()
-            self.connection.close()
-            self.Show_All_Lend_Operations()
-            self.lineEdit_2.setText("")
+            adet = int(isbn[6])
+            print(adet)
+            if adet>0:
+                self.connection = psycopg2.connect(user = "postgres",
+                                                password = "1234",
+                                                host = "localhost",
+                                                port = "5432",
+                                                database = "postgres")
+                self.cursor = self.connection.cursor()
+                sql = """INSERT INTO islemler(ogrenci_tc,kitap_isbn,kitap_durum,alindi_tarihi,teslim_tarihi) VALUES(%s,%s,%s,%s,%s)"""
+                self.cursor.execute(sql,(ogrenci_tc,isbn[0],durum,bugun_text,teslim_tarihi_text))
+                self.connection.commit()
+                self.connection.close()
+                self.connection = psycopg2.connect(user = "postgres",
+                                                password = "1234",
+                                                host = "localhost",
+                                                port = "5432",
+                                                database = "postgres")
+                self.cursor = self.connection.cursor()
+                sql  = """UPDATE kitaplar SET kitap_adet = kitap_adet - 1 WHERE isbn = %s"""
+                self.cursor.execute(sql,[(isbn[0])])
+                self.connection.commit()
+                self.connection.close()
+                self.Show_All_Lend_Operations()
+                self.lineEdit_2.setText("")
+            else:
+                self.lineEdit_2.setText("")
+                QMessageBox.warning(self,"Uyarı","{} adlı kitaptan kalmamıştır.".format(isbn[1]))
+                
         except psycopg2.errors.ForeignKeyViolation:
             QMessageBox.warning(self,"Uyarı","{} kimlik nolu öğrenci sistemde bulunmamaktadır.".format(ogrenci_tc))
     def Show_All_Lend_Operations(self):
@@ -179,9 +186,9 @@ class MainApp(QMainWindow , ui):
                     alindi_tarihi,
                     teslim_tarihi
                 FROM islemler
-                INNER JOIN kitaplar
+                    INNER JOIN kitaplar
                 ON islemler.kitap_isbn = kitaplar.isbn
-                INNER JOIN  ogrenciler
+                    INNER JOIN  ogrenciler
                 ON ogrenciler.ogrenci_tc = islemler.ogrenci_tc"""
 
         self.cursor.execute(sql)
@@ -196,6 +203,7 @@ class MainApp(QMainWindow , ui):
                 column+=1
             row_position = self.tableWidget.rowCount()
             self.tableWidget.insertRow(row_position)
+            self.label_29.setText(" {} Kayıt".format(row_position))
         self.connection.close()
     def Lend_Remove(self):
 
@@ -220,6 +228,8 @@ class MainApp(QMainWindow , ui):
         self.connection.commit()
         self.connection.close()
         self.Show_All_Lend_Operations()
+        self.label_41.setText("")
+        self.label_39.setText("")
 
     ###############################
     ######### Books ###############
