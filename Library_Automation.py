@@ -58,17 +58,49 @@ class MainApp(QMainWindow , ui):
         self.pushButton_21.clicked.connect(self.Dark_Blue_Theme)
         self.pushButton_22.clicked.connect(self.Dark_Gray_Theme)
         self.pushButton_24.clicked.connect(self.QDark_Theme)
-
+        
+        self.pushButton_11.clicked.connect(self.Show_All_Lend_Operations)
         self.pushButton_6.clicked.connect(self.Add_Lend_Operation)
         self.pushButton_7.clicked.connect(self.Lend_Remove)
+        self.tableWidget.cellClicked.connect(self.ogrenci_bilgileri_goster)
 
+    def ogrenci_bilgileri_goster(self,row,column):
+
+        item = self.tableWidget.item(row,5)
+        item1 = self.tableWidget.item(row,0)
+        item2 = self.tableWidget.item(row,1)
+
+        self.connection = psycopg2.connect(user = "postgres",
+                                           password = "1234",
+                                           host = "localhost",
+                                           port = "5432",
+                                           database = "postgres")
+        self.cursor = self.connection.cursor()
+        sql = """SELECT concat(ogrenci_adi,' ',ogrenci_soyadi) AS isim,
+                    ogrenci_email,
+                    ogrenci_tel,
+                    ogrenci_tc
+                FROM
+                    ogrenciler
+                WHERE ogrenci_tc=%s"""
+        self.cursor.execute(sql,[(item.text())])
+        data = self.cursor.fetchone()
+        self.label_39.setText(item2.text())
+        self.label_41.setText(item1.text())
+        self.label_7.setText(data[0])
+        self.label_23.setText(data[1])
+        self.label_24.setText(data[2])
+        self.label_28.setText(data[3])
+        self.connection.commit()
+        self.connection.close()
+        
     def Show_Themes(self):
         self.groupBox_4.show()
     def Hiding_Themes(self):
         self.groupBox_4.hide()
 
-    ########################################
-    ######### opening tabs #################
+    ####################################
+    ######### opening tabs #############
 
     def Open_Lend_Operations(self):
         self.tabWidget.setCurrentIndex(0)
@@ -83,7 +115,7 @@ class MainApp(QMainWindow , ui):
         self.tabWidget.setCurrentIndex(3)
 
     ########################################
-    ######### Day Operations #################
+    ######### Day Operations ###############
     
     def Add_Lend_Operation(self):
         try:
@@ -102,9 +134,10 @@ class MainApp(QMainWindow , ui):
                                             port = "5432",
                                             database = "postgres")
             self.cursor = self.connection.cursor()
-            self.cursor.execute("""SELECT isbn FROM kitaplar WHERE kitap_adi = %s""",[(ogrenci_kitap)])
+            self.cursor.execute("""SELECT * FROM kitaplar WHERE kitap_adi = %s""",[(ogrenci_kitap)])
             isbn = self.cursor.fetchone()
             self.connection.close()
+
             self.connection = psycopg2.connect(user = "postgres",
                                             password = "1234",
                                             host = "localhost",
@@ -121,17 +154,14 @@ class MainApp(QMainWindow , ui):
                                             port = "5432",
                                             database = "postgres")
             self.cursor = self.connection.cursor()
-            sql  = """UPDATE kitaplar SET kitap_adet = kitap_adet - 1 WHERE isbn = isbn"""
-            self.cursor.execute(sql,isbn[0])
+            sql  = """UPDATE kitaplar SET kitap_adet = kitap_adet - 1 WHERE isbn = %s"""
+            self.cursor.execute(sql,[(isbn[0])])
             self.connection.commit()
             self.connection.close()
             self.Show_All_Lend_Operations()
             self.lineEdit_2.setText("")
-            QMessageBox.about(self,"Bilgilendirme","{} adlı kitap {} günlüğüne öğrenciye teslim edilmiştir.".format(ogrenci_kitap,gun))
-
         except psycopg2.errors.ForeignKeyViolation:
-            QMessageBox.warning(self,"Dikkat","Girdiğiniz kimlik no sistemde bulunmamaktadır.")
-            
+            QMessageBox.warning(self,"Uyarı","{} kimlik nolu öğrenci sistemde bulunmamaktadır.".format(ogrenci_tc))
     def Show_All_Lend_Operations(self):
         self.connection = psycopg2.connect(user = "postgres",
                                            password = "1234",
@@ -140,23 +170,26 @@ class MainApp(QMainWindow , ui):
                                            database = "postgres")
         self.cursor = self.connection.cursor()
         sql="""SELECT
+                    id,
                     kitap_isbn,
                     kitap_adi,
                     kitap_durum,
                     concat(ogrenci_adi,' ',ogrenci_soyadi) AS isim,
+                    ogrenciler.ogrenci_tc,
                     alindi_tarihi,
                     teslim_tarihi
                 FROM islemler
                 INNER JOIN kitaplar
                 ON islemler.kitap_isbn = kitaplar.isbn
                 INNER JOIN  ogrenciler
-                ON ogrenciler.ogrenci_tc = islemler.ogrenci_tc""" 
+                ON ogrenciler.ogrenci_tc = islemler.ogrenci_tc"""
+
         self.cursor.execute(sql)
         data = self.cursor.fetchall()
-
+        
         self.tableWidget.setRowCount(0)
         self.tableWidget.insertRow(0)
-
+        
         for row,form in enumerate(data):
             for column,item in enumerate(form):
                 self.tableWidget.setItem(row,column,QTableWidgetItem(str(item)))
@@ -164,19 +197,39 @@ class MainApp(QMainWindow , ui):
             row_position = self.tableWidget.rowCount()
             self.tableWidget.insertRow(row_position)
         self.connection.close()
-        
-       
     def Lend_Remove(self):
-        pass
-    #################################
-    ######### Books #################
 
+        o_id = int(self.label_41.text())
+        o_kitap =str(self.label_39.text()) 
+        self.connection = psycopg2.connect(user = "postgres",
+                                            password = "1234",
+                                            host = "localhost",
+                                            port = "5432",
+                                            database = "postgres")
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("""DELETE FROM islemler WHERE id=%s""",[o_id])
+        self.connection.commit()
+        self.connection.close()
+        self.connection = psycopg2.connect(user = "postgres",
+                                            password = "1234",
+                                            host = "localhost",
+                                            port = "5432",
+                                            database = "postgres")
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("""UPDATE kitaplar SET kitap_adet = kitap_adet + 1 WHERE isbn=%s""",[(o_kitap)])
+        self.connection.commit()
+        self.connection.close()
+        self.Show_All_Lend_Operations()
+
+    ###############################
+    ######### Books ###############
+    
     def Show_All_Books(self):
         self.connection = psycopg2.connect(user = "postgres",
-                                        password = "1234",
-                                        host = "localhost",
-                                        port = "5432",
-                                        database = "postgres")
+                                           password = "1234",
+                                           host = "localhost",
+                                           port = "5432",
+                                           database = "postgres")
         self.cursor = self.connection.cursor()
         sql = """SELECT isbn,kitap_adi,kitap_yazar,kitap_kategori,kitap_yayinevi,kitap_aciklama,kitap_sayfa,kitap_adet FROM kitaplar"""     
         self.cursor.execute(sql)
@@ -191,9 +244,7 @@ class MainApp(QMainWindow , ui):
                 column+=1
             row_position = self.tableWidget_5.rowCount()
             self.tableWidget_5.insertRow(row_position)
-        
         self.connection.close()
-
 
     def Add_New_Book(self):
 
@@ -209,7 +260,6 @@ class MainApp(QMainWindow , ui):
         if len(isbn) == 13 and len(kitap_yazar) > 0 and len(kitap_kategori) > 0 and len(kitap_yayinevi) > 0 and kitap_adet >0 and len(kitap_adi) > 0:
 
             try:
-
                 self.connection = psycopg2.connect(user = "postgres",
                                                    password = "1234",
                                                    host = "localhost",
@@ -277,7 +327,7 @@ class MainApp(QMainWindow , ui):
             self.spinBox_2.setValue(data[6])
         except TypeError:
             QMessageBox.about(self,"Hata","Aradığınız kitap listede bulunmamaktadır.")
-
+        
     def Edit_Books(self):
         
         self.connection = psycopg2.connect(user = "postgres",
@@ -287,7 +337,7 @@ class MainApp(QMainWindow , ui):
                                         database = "postgres")
         self.cursor = self.connection.cursor()
         aranan_kitap = self.comboBox_5.currentText()
-
+        
         isbn = self.lineEdit_7.text()
         kitap_adi = self.lineEdit.text()
         kitap_yazar = self.comboBox_11.currentText()
